@@ -1,0 +1,158 @@
+@use '../../styles/variables' as *;
+
+.settings {
+  position: relative;
+  min-height: 100vh;
+  background: $color-bg;
+  color: $color-text;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 78px;
+}
+
+.header {
+  padding: 22px 20px 16px;
+}
+
+.title {
+  font-family: $font-heading;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.body {
+  padding: 4px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profileCard {
+  background: $color-card;
+  border-radius: 18px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: $color-accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-heading;
+  font-size: 24px;
+  font-weight: 600;
+  color: $color-bg;
+}
+
+.profileText {
+  text-align: center;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.email {
+  font-size: 12.5px;
+  color: $color-muted;
+  margin-top: 2px;
+}
+
+.logoutButton {
+  width: 100%;
+  height: 46px;
+  border-radius: 23px;
+  background: transparent;
+  border: 1px solid $color-border;
+  color: $color-text;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $color-accent;
+  }
+}
+
+.settingsCard {
+  background: $color-card;
+  border-radius: 18px;
+  padding: 4px 18px;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+
+  &.disabled {
+    opacity: 0.55;
+  }
+}
+
+.settingText {
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.settingLabel {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.settingBadge {
+  font-size: 11px;
+  color: $color-muted;
+  font-weight: 400;
+}
+
+.settingDescription {
+  font-size: 12px;
+  color: $color-muted;
+  margin-top: 3px;
+}
+
+.toggle {
+  width: 42px;
+  height: 24px;
+  border-radius: 12px;
+  background: $color-border;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.toggleKnob {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: $color-muted-dim;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-muted-dim;
+  padding: 10px 4px 6px;
+}
+
+.appInfo {
+  background: $color-card;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: $color-text;
+}
