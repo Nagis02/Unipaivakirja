@@ -1,10 +1,17 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '../../firebase'
+import { useAuth } from '../../context/AuthContext'
 import styles from './Login.module.scss'
 
 const Login = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (user) navigate('/koti')
+  }, [user, navigate])
 
   const handleLogin = async () => {
     try {
