@@ -1,13 +1,18 @@
 import { useNavigate } from 'react-router-dom'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../../firebase'
 import styles from './Login.module.scss'
 
 const Login = () => {
   const navigate = useNavigate()
 
-  // Huom: tässä vaiheessa kirjautuminen on simuloitu — oikea
-  // Firebase Authin kautta tapahtuva Google-kirjautuminen lisätään myöhemmässä vaiheessa.
-  const handleLogin = () => {
-    navigate('/koti')
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider)
+      navigate('/koti')
+    } catch (error) {
+      console.error('Kirjautuminen epäonnistui:', error)
+    }
   }
 
   return (

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from '../../firebase'
 import BottomNav from '../../components/BottomNav/BottomNav'
 import styles from './Settings.module.scss'
 
 const Settings = () => {
   const navigate = useNavigate()
 
-  // Simuloitu uloskirjautuminen — oikea Firebase-kirjautuminen lisätään myöhemmin.
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await signOut(auth)
     navigate('/')
   }
 
