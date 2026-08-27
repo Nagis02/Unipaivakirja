@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
+import { addEntry } from '../../services/entries'
 import { QUALITY_LEVELS, formatDuration } from '../../utils/sleepQuality'
 import styles from './EntryForm.module.scss'
 
@@ -28,6 +30,7 @@ const todayIso = () => {
 
 const EntryForm = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const [date, setDate] = useState(todayIso())
   const [start, setStart] = useState('23:00')
@@ -36,6 +39,8 @@ const EntryForm = () => {
   const [location, setLocation] = useState('')
   const [disturbances, setDisturbances] = useState([])
   const [notes, setNotes] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
 
   const duration = calculateDuration(start, end)
 
@@ -45,17 +50,22 @@ const EntryForm = () => {
     )
   }
 
-  const canSave = Boolean(date && start && end && quality)
+  const canSave = Boolean(date && start && end && quality) && !saving
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    if (!canSave) return
+    if (!canSave || !user) return
 
-    const entry = { date, start, end, duration, quality, location, disturbances, notes }
-    // Huom: tallennus Firestoreen lisätään myöhemmässä vaiheessa —
-    // toistaiseksi merkintä vain tulostetaan konsoliin.
-    console.log('Uusi yö:', entry)
-    navigate('/koti')
+    setSaving(true)
+    setError(null)
+    try {
+      await addEntry(user.uid, { date, start, end, duration, quality, location, disturbances, notes })
+      navigate('/koti')
+    } catch (err) {
+      console.error('Tallennus epäonnistui:', err)
+      setError('Tallennus epäonnistui. Yritä uudelleen.')
+      setSaving(false)
+    }
   }
 
   return (
@@ -181,11 +191,13 @@ const EntryForm = () => {
             placeholder="Vapaa sana yöstä..."
           />
         </div>
+
+        {error && <div className={styles.error}>{error}</div>}
       </div>
 
       <div className={styles.footer}>
         <button type="submit" className={styles.saveButton} disabled={!canSave}>
-          Tallenna
+          {saving ? 'Tallennetaan…' : 'Tallenna'}
         </button>
       </div>
     </form>

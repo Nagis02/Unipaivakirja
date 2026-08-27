@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom'
 import BottomNav from '../../components/BottomNav/BottomNav'
-import { sampleEntries } from '../../data/sampleEntries'
+import { useEntries } from '../../hooks/useEntries'
 import { qualityByKey, formatDuration } from '../../utils/sleepQuality'
+import { formatWeekdayShort, formatDateShort } from '../../utils/formatDate'
 import styles from './Home.module.scss'
 
 const Home = () => {
-  const entries = sampleEntries
+  const { entries, loading } = useEntries()
+
   const latest = entries[0]
-  const average = Math.round(entries.reduce((sum, e) => sum + e.duration, 0) / entries.length)
+  const average = entries.length
+    ? Math.round(entries.reduce((sum, e) => sum + e.duration, 0) / entries.length)
+    : 0
 
   return (
     <div className={styles.home}>
@@ -30,25 +34,37 @@ const Home = () => {
           <div className={styles.statLabel}>yötä seurattu</div>
         </div>
         <div className={styles.statTile}>
-          <div className={styles.statValue}>{formatDuration(average)}</div>
+          <div className={styles.statValue}>{entries.length ? formatDuration(average) : '–'}</div>
           <div className={styles.statLabel}>keskiarvo</div>
         </div>
         <div className={styles.statTile}>
-          <div className={`${styles.statValue} ${styles.accent}`}>{formatDuration(latest.duration)}</div>
-          <div className={styles.statLabel}>viime yö · {qualityByKey(latest.quality).label}</div>
+          <div className={`${styles.statValue} ${styles.accent}`}>
+            {latest ? formatDuration(latest.duration) : '–'}
+          </div>
+          <div className={styles.statLabel}>
+            {latest ? `viime yö · ${qualityByKey(latest.quality).label}` : 'viime yö'}
+          </div>
         </div>
       </div>
 
       <div className={styles.sectionTitle}>Viimeisimmät yöt</div>
 
       <div className={styles.list}>
+        {loading && <div className={styles.empty}>Ladataan…</div>}
+
+        {!loading && entries.length === 0 && (
+          <div className={styles.empty}>Ei vielä kirjattuja öitä — lisää ensimmäinen yö alla olevasta painikkeesta.</div>
+        )}
+
         {entries.map((entry) => {
           const quality = qualityByKey(entry.quality)
           return (
             <div key={entry.id} className={styles.entry}>
               <div className={styles.dot} style={{ background: quality.color }}></div>
               <div className={styles.entryInfo}>
-                <div className={styles.entryDate}>{entry.weekday} {entry.dateShort}</div>
+                <div className={styles.entryDate}>
+                  {formatWeekdayShort(entry.date)} {formatDateShort(entry.date)}
+                </div>
                 <div className={styles.entryMeta}>{entry.start}–{entry.end} · {quality.label}</div>
               </div>
               <div className={styles.entryDuration}>{formatDuration(entry.duration)}</div>

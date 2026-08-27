@@ -138,3 +138,12 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+.empty {
+  background: $color-card;
+  border-radius: 16px;
+  padding: 20px 16px;
+  font-size: 13.5px;
+  color: $color-muted;
+  text-align: center;
+}
