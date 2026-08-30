@@ -23,10 +23,11 @@ Sovellus on toteutettu näyttötyönä.
 ## Asennus ja käyttö
 
 Tämän projektin käyttäminen edellyttää,  että `node`- ja `npm`-sovellukset on asennettu.
-Sovellusta voi myös testata osoitteessa https://unipaivakirja.web.app/
 
 1. Lataa tai kloonaa tämä repo.
 2. Suorita projektikansiossa komento `npm install`.
 3. Käynnistä testausympäristö komennolla `npm run test`.
 4. Käynnistä kehitysympäristö komennolla `npm run dev`. 
 5. Testaa sovellusta osoitteessa [http://localhost:5173](http://localhost:5173).
+
+Sovellusta voi myös testata osoitteessa https://unipaivakirja.web.app/
