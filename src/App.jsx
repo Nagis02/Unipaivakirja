@@ -13,6 +13,7 @@ const App = () => {
       <Route path="/" element={<Login />} />
       <Route path="/koti" element={<ProtectedRoute><Home /></ProtectedRoute>} />
       <Route path="/uusi" element={<ProtectedRoute><EntryForm /></ProtectedRoute>} />
+      <Route path="/muokkaa/:id" element={<ProtectedRoute><EntryForm /></ProtectedRoute>} />
       <Route path="/tilastot" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
       <Route path="/asetukset" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
     </Routes>

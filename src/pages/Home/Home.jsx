@@ -59,7 +59,7 @@ const Home = () => {
         {entries.map((entry) => {
           const quality = qualityByKey(entry.quality)
           return (
-            <div key={entry.id} className={styles.entry}>
+            <Link key={entry.id} to={`/muokkaa/${entry.id}`} className={styles.entry}>
               <div className={styles.dot} style={{ background: quality.color }}></div>
               <div className={styles.entryInfo}>
                 <div className={styles.entryDate}>
@@ -68,7 +68,7 @@ const Home = () => {
                 <div className={styles.entryMeta}>{entry.start}–{entry.end} · {quality.label}</div>
               </div>
               <div className={styles.entryDuration}>{formatDuration(entry.duration)}</div>
-            </div>
+            </Link>
           )
         })}
       </div>

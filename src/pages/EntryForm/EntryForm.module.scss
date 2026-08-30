@@ -151,6 +151,31 @@
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deleteButton {
+  width: 100%;
+  height: 46px;
+  border-radius: 23px;
+  background: transparent;
+  border: 1px solid $color-border;
+  color: #e08a8a;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #e08a8a;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .saveButton {

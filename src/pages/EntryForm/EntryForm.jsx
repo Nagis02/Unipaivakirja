@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { addEntry } from '../../services/entries'
+import { useEntries } from '../../hooks/useEntries'
+import { addEntry, updateEntry, deleteEntry } from '../../services/entries'
 import { QUALITY_LEVELS, formatDuration } from '../../utils/sleepQuality'
 import styles from './EntryForm.module.scss'
 
@@ -31,6 +32,11 @@ const todayIso = () => {
 const EntryForm = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { id } = useParams()
+  const isEditing = Boolean(id)
+
+  const { entries, loading: entriesLoading } = useEntries()
+  const existingEntry = isEditing ? entries.find((e) => e.id === id) : null
 
   const [date, setDate] = useState(todayIso())
   const [start, setStart] = useState('23:00')
@@ -39,8 +45,23 @@ const EntryForm = () => {
   const [location, setLocation] = useState('')
   const [disturbances, setDisturbances] = useState([])
   const [notes, setNotes] = useState('')
+  const [initialized, setInitialized] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (isEditing && existingEntry && !initialized) {
+      setDate(existingEntry.date)
+      setStart(existingEntry.start)
+      setEnd(existingEntry.end)
+      setQuality(existingEntry.quality)
+      setLocation(existingEntry.location || '')
+      setDisturbances(existingEntry.disturbances || [])
+      setNotes(existingEntry.notes || '')
+      setInitialized(true)
+    }
+  }, [isEditing, existingEntry, initialized])
 
   const duration = calculateDuration(start, end)
 
@@ -50,7 +71,7 @@ const EntryForm = () => {
     )
   }
 
-  const canSave = Boolean(date && start && end && quality) && !saving
+  const canSave = Boolean(date && start && end && quality) && !saving && !deleting
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -58,14 +79,56 @@ const EntryForm = () => {
 
     setSaving(true)
     setError(null)
+    const entry = { date, start, end, duration, quality, location, disturbances, notes }
+
     try {
-      await addEntry(user.uid, { date, start, end, duration, quality, location, disturbances, notes })
+      if (isEditing) {
+        await updateEntry(user.uid, id, entry)
+      } else {
+        await addEntry(user.uid, entry)
+      }
       navigate('/koti')
     } catch (err) {
       console.error('Tallennus epäonnistui:', err)
       setError('Tallennus epäonnistui. Yritä uudelleen.')
       setSaving(false)
     }
+  }
+
+  const handleDelete = async () => {
+    if (!isEditing || !user) return
+    const confirmed = window.confirm('Poistetaanko tämä yö pysyvästi?')
+    if (!confirmed) return
+
+    setDeleting(true)
+    setError(null)
+    try {
+      await deleteEntry(user.uid, id)
+      navigate('/koti')
+    } catch (err) {
+      console.error('Poisto epäonnistui:', err)
+      setError('Poisto epäonnistui. Yritä uudelleen.')
+      setDeleting(false)
+    }
+  }
+
+  if (isEditing && !entriesLoading && !existingEntry) {
+    return (
+      <div className={styles.form}>
+        <div className={styles.header}>
+          <button type="button" className={styles.closeButton} onClick={() => navigate('/koti')} aria-label="Sulje">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+          <div className={styles.title}>Yötä ei löytynyt</div>
+          <div className={styles.spacer}></div>
+        </div>
+        <div className={styles.body}>
+          <div className={styles.error}>Merkintää ei löytynyt — se on ehkä jo poistettu.</div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -76,7 +139,7 @@ const EntryForm = () => {
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
-        <div className={styles.title}>Uusi yö</div>
+        <div className={styles.title}>{isEditing ? 'Muokkaa yötä' : 'Uusi yö'}</div>
         <div className={styles.spacer}></div>
       </div>
 
@@ -196,6 +259,11 @@ const EntryForm = () => {
       </div>
 
       <div className={styles.footer}>
+        {isEditing && (
+          <button type="button" className={styles.deleteButton} onClick={handleDelete} disabled={saving || deleting}>
+            {deleting ? 'Poistetaan…' : 'Poista yö'}
+          </button>
+        )}
         <button type="submit" className={styles.saveButton} disabled={!canSave}>
           {saving ? 'Tallennetaan…' : 'Tallenna'}
         </button>
