@@ -1,16 +1,21 @@
-# React + Vite
+# Unipäiväkirja
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Henkilökohtainen unipäiväkirjasovellus, johon käyttäjä kirjaa yönsä — nukkumaanmeno- ja heräämisajan sekä unenlaadun — ja josta hän näkee unensa keston ja laadun kehityksen tilastoina.
 
-Currently, two official plugins are available:
+Sovellus on toteutettu näyttötyönä.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Ominaisuudet
 
-## React Compiler
+- Kirjautuminen Google-tilillä (Firebase Authentication)
+- Öiden kirjaus: päivämäärä, nukkumaanmeno- ja heräämisaika (kesto lasketaan automaattisesti), unenlaatu neliportaisella asteikolla (Huono / Kohtalainen / Hyvä / Erinomainen), sekä vapaaehtoiset lisätiedot (paikka, häiriöt yöllä, muistiinpanot)
+- Öiden muokkaus ja poisto
+- Etusivu: yhteenveto seurattujen öiden määrästä, keskiarvosta ja viime yöstä, sekä lista viimeisimmistä merkinnöistä
+- Tilastot: keskiarvo, pisin ja lyhyin yö, unen keston kehitys viivakaaviona sekä unenlaadun jakauma, suodatettavissa 7 vrk / kaikki -valinnalla
+- Jokaisen käyttäjän data on tallennettu erikseen Firestoreen (`users/{uid}/entries`) ja suojattu Firestore-säännöillä niin, ettei kukaan pääse käsiksi toisen käyttäjän tietoihin
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Teknologiat
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- React 19 + Vite
+- Sass (CSS-moduulit)
+- React Router
+- Firebase Authentication (Google-kirjautuminen) ja Firestore
