@@ -1,16 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
+import { useAuth } from '../../context/AuthContext'
 import BottomNav from '../../components/BottomNav/BottomNav'
 import styles from './Settings.module.scss'
 
 const Settings = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const handleLogout = async () => {
     await signOut(auth)
     navigate('/')
   }
+
+  const initial = user?.displayName?.charAt(0)?.toUpperCase()
+    || user?.email?.charAt(0)?.toUpperCase()
+    || '?'
 
   return (
     <div className={styles.settings}>
@@ -20,10 +26,14 @@ const Settings = () => {
 
       <div className={styles.body}>
         <div className={styles.profileCard}>
-          <div className={styles.avatar}>H</div>
+          {user?.photoURL ? (
+            <img src={user.photoURL} alt="" className={styles.avatarImage} />
+          ) : (
+            <div className={styles.avatar}>{initial}</div>
+          )}
           <div className={styles.profileText}>
-            <div className={styles.name}>Henrik Virtanen</div>
-            <div className={styles.email}>henrik@example.com</div>
+            <div className={styles.name}>{user?.displayName || 'Käyttäjä'}</div>
+            <div className={styles.email}>{user?.email}</div>
           </div>
           <button className={styles.logoutButton} onClick={handleLogout}>
             Kirjaudu ulos
