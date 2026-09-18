@@ -31,3 +31,11 @@ Tämän projektin käyttäminen edellyttää,  että `node`- ja `npm`-sovellukse
 5. Testaa sovellusta osoitteessa [http://localhost:5173](http://localhost:5173).
 
 Sovellusta voi myös testata osoitteessa https://unipaivakirja.web.app/
+
+## Ylläpitäjä
+
+Tätä projektia ylläpitää [Henrik Virtanen](https://github.com/Nagis02). 
+
+## Lisenssi
+
+Tämä projekti on julkaistu lisenssillä [MIT license](LICENSE).
