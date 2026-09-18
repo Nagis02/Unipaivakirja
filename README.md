@@ -1,6 +1,6 @@
 # Unipäiväkirja
 
-Henkilökohtainen unipäiväkirjasovellus, johon käyttäjä kirjaa yönsä — nukkumaanmeno- ja heräämisajan sekä unenlaadun — ja josta hän näkee unensa keston ja laadun kehityksen tilastoina.
+Henkilökohtainen unipäiväkirjasovellus, johon käyttäjä kirjaa yönsä nukkumaanmeno- ja heräämisajan sekä unenlaadun ja josta hän näkee unensa keston ja laadun kehityksen tilastoina.
 
 Sovellus on toteutettu näyttötyönä.
 
